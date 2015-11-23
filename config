@@ -1,0 +1,28 @@
+# Config file for the DNSAdBlocker
+
+# LISTEN is the local interface address and port
+# The IP address of the running server
+# TARGETDNS is the DNS server to send request to that are not found
+# Default is OpenDNS's family filter (block adult sites)
+# ports are ignored for now
+[config]
+LOCALADDR: 0.0.0.0,53
+TARGETDNS: 208.67.222.123,53
+
+# INPROC Number of spawned processes handling incoming messages from clients
+# OUTPROC Number of spawned processes handling return messages form the DNS server
+# Defaults and minimum is 2 in proc and 1 out proc
+INPROC:		3
+OUTPROC:	2
+
+# Information about information printed to screen
+[reporting]
+SUMMARY: True
+BLOCKED: True
+SERVED:  True
+TIME:    True
+
+# define the regex string to filter
+# if you have any good additions, please let the author know. :)
+[regex]
+REGEXLIST = ^(ad|ads|-ad|-ads|advert|counter.|counters.|stats.|track.|tracker.|tracking.)\d*\.|\S(.adspace|.adspot|.adtech|advertisement|.ad-cloud|.ad-sys|.ad-traffic|.stats.)\S*\.
