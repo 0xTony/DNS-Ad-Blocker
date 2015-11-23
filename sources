@@ -1,0 +1,40 @@
+# Listing of sources for blocking
+# Creative Commons for this listing only
+# you can add your own list to block by including a 
+
+#ads, small but good
+http://pgl.yoyo.org/as/serverlist.php?hostformat=hosts;showintro=0
+#mostly ads
+http://winhelp2002.mvps.org/hosts.txt
+#mostly ads # This is LGPL
+http://hostsfile.mine.nu/Hosts
+# ads, updated often
+http://hosts-file.net/ad_servers.txt
+http://adaway.org/hosts.txt
+
+# This is a VERY VERY large list
+# It is overly agressive, more then it needs
+# and so it will require monitoring and updating your white list
+# but it has many ad sites that the other lists dont.
+# future scripts will work to parse out as much good sites in the list
+# as possible to make the blocking better.
+http://adblock.mahakala.is
+
+# License: http://creativecommons.org/licenses/by/3.0/, not updated often
+http://adblock.gjtech.net/?format=unix-hosts
+
+# malware - updated often
+http://www.malwaredomainlist.com/hostslist/hosts.txt
+
+# updated often
+http://someonewhocares.org/hosts/hosts
+
+# adult listing section for blocking - remove if you do not want these blocked
+# Note: zip/gz files need special handling. Probably need code mods to add new entries
+# The adult listing is huge. If you are memory constrained, dont include and point 
+# the dns proxy to OpenDNS's family filter DNS server; it will block all adult sites.
+ftp://ftp.ut-capitole.fr/pub/reseau/cache/squidguard_contrib/adult.tar.gz
+
+
+## ms for filtering microsoft spyware
+https://raw.githubusercontent.com/0xTony/Web-Filters/master/source-blacklist-ms
