@@ -23,8 +23,7 @@ total processing time is sub millisecond.
 Please note: this assumes the reader has some knowledge about programming, networking,
 Linux/OSX, and hopefully some python. 
 
-Before Running:
-First, download the following files: 
+Before running, download the following files:  
 createblocklist.py = This file uses sources to download various lists of URLs
 to block and will create a file blocklist that the dns filter uses.
 
@@ -46,11 +45,11 @@ config = Configuration used by the dnsproxy to set the listening ip address, the
 to send requests, URL blocking grep string, etc.
 
 dnsproxy.py requires the installation of the dnslib python package. This can be installed
-by running:
-sudo pip install dnslib
+by running:  
+sudo pip install dnslib  
 If you do not have pip installed, there are multiple resources available by search.
 
-Steps to Run
+Steps to Run:  
 1. Edit the sources file as needed.  (instructions in the file itself)  
 2. run createblcoklist.py via the following command  
 python createblocklist.py  
