@@ -51,16 +51,16 @@ sudo pip install dnslib
 If you do not have pip installed, there are multiple resources available by search.
 
 Steps to Run
-1. Edit the sources file as needed.  (instructions in the file itself)
-2. run createblcoklist.py via the following command
-python createblocklist.py
-This will take a few minutes to download all the sources and parse/prune the information
-At the end, there should be a file called blocklist that should be a non-zero size. 
-3. Edit the whitelist file as needed. (instructions in the file itself)
-4. Edit the config file as needed. (instructions in the file itself)
-5. Run the DNS proxy via the following command
-sudo python dnsproxy.py
-The program requires sudo to bind the listening address/port. 
-6. Point your client's DNS entries to the bound IP address.
+1. Edit the sources file as needed.  (instructions in the file itself)  
+2. run createblcoklist.py via the following command  
+python createblocklist.py  
+This will take a few minutes to download all the sources and parse/prune the information  
+At the end, there should be a file called blocklist that should be a non-zero size.   
+3. Edit the whitelist file as needed. (instructions in the file itself)  
+4. Edit the config file as needed. (instructions in the file itself)  
+5. Run the DNS proxy via the following command  
+sudo python dnsproxy.py  
+The program requires sudo to bind the listening address/port.  
+6. Point your client's DNS entries to the bound IP address.  
 
-To stop the dnsproxy, use control-C
+To stop the dnsproxy, use control-C  
