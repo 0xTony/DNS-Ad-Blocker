@@ -39,7 +39,8 @@ config = This file holds the configuration information used by dnsproxy. It incl
 information such as the local IP address to bind, the DNS server to use, etc
  
 whitelist = This file contains a listing of strings, that if match as a substring of 
-a URL, will allow the request and prevent any blocking. 
+a URL, will allow the request and prevent any blocking. Each line should
+contain a single string/entry.
 
 config = Configuration used by the dnsproxy to set the listening ip address, the DNS server
 to send requests, URL blocking grep string, etc.
@@ -55,7 +56,7 @@ Steps to Run:
 python createblocklist.py  
 This will take a few minutes to download all the sources and parse/prune the information  
 At the end, there should be a file called blocklist that should be a non-zero size.   
-3. Edit the whitelist file as needed. (instructions in the file itself)  
+3. Edit the whitelist file as needed.  
 4. Edit the config file as needed. (instructions in the file itself)  
 5. Run the DNS proxy via the following command  
 sudo python dnsproxy.py  
