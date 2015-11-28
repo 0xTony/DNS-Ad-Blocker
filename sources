@@ -33,7 +33,8 @@ http://someonewhocares.org/hosts/hosts
 # Note: zip/gz files need special handling. Probably need code mods to add new entries
 # The adult listing is huge. If you are memory constrained, dont include and point 
 # the dns proxy to OpenDNS's family filter DNS server; it will block all adult sites.
-ftp://ftp.ut-capitole.fr/pub/reseau/cache/squidguard_contrib/adult.tar.gz
+# To block Adult sites, remove the # on the line below.
+# ftp://ftp.ut-capitole.fr/pub/reseau/cache/squidguard_contrib/adult.tar.gz
 
 
 ## ms for filtering microsoft spyware
