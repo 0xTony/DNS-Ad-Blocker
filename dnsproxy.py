@@ -53,7 +53,13 @@ PrintSummary = False
 #PrintServed = False
 #PrintTime = False
 
-  
+# Open file and add to contents
+def addToFile(filename, data):
+	target = open(filename, 'a')
+	target.write(data) 
+	target.write("\n")  
+	target.close()
+	
 #download list of sources from github 
 def readFile(filename):
 	target = open(filename, 'r')
@@ -114,7 +120,8 @@ def checkRegEx(host):
 	if re.match(RegExList, host):
 		print "Blocking Regex " + host
 		BlockListDict[host] = 0
-		return True;
+		addToFile("regexblock", host)
+		return True
 	return False
 	
 # Check the host, and progressively strip the left part of the URL looking for a subdomain match
