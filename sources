@@ -18,7 +18,7 @@ http://adaway.org/hosts.txt
 # but it has many ad sites that the other lists dont.
 # future scripts will work to parse out as much good sites in the list
 # as possible to make the blocking better.
-http://adblock.mahakala.is
+# http://adblock.mahakala.is
 
 # License: http://creativecommons.org/licenses/by/3.0/, not updated often
 http://adblock.gjtech.net/?format=unix-hosts
