@@ -37,5 +37,8 @@ http://someonewhocares.org/hosts/hosts
 # ftp://ftp.ut-capitole.fr/pub/reseau/cache/squidguard_contrib/adult.tar.gz
 
 
-## ms for filtering microsoft spyware
+## filtering microsoft spyware
 https://raw.githubusercontent.com/0xTony/Web-Filters/master/source-blacklist-ms
+
+# regex finds
+https://raw.githubusercontent.com/0xTony/Web-Filters/master/source-blacklist-regex
