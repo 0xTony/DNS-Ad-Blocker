@@ -26,3 +26,4 @@ TIME:    True
 # if you have any good additions, please let the author know. :)
 [regex]
 REGEXLIST = ^(ad|ads|-ad|-ads|advert|counter|counters|stats|track|tracker|tracking)\d*\.|\S(.adspace|.adspot|.adtech|advertisement|.ad-cloud|.ad-sys|.ad-traffic|.stats)\S*\.|\.(zip|review|country|kim|cricket|science|work|party|gq|link)$
+
