@@ -12,15 +12,15 @@ TARGETDNS: 208.67.222.123,53
 # INPROC Number of spawned processes handling incoming messages from clients
 # OUTPROC Number of spawned processes handling return messages form the DNS server
 # Defaults and minimum is 2 in proc and 1 out proc
-INPROC:		3
-OUTPROC:	2
+INPROC: 3
+OUTPROC: 2
 
 # Information printed to screen - Only Summary used right now
 [reporting]
 SUMMARY: True
 BLOCKED: True
-SERVED:  True
-TIME:    True
+SERVED: True
+TIME: True
 
 # define the regex string to filter
 # if you have any good additions, please let the author know. :)
