@@ -93,8 +93,12 @@ def isBlocked(host):
 	if host.startswith("www."):
 		host = host.replace("www.", "") # no longer in host files
 	
+	# Checking whitelist after a block match is overall faster. 
+	# Need to check regex and block cache for all requests no matter what. 
+	# Will only his a match on block <20% of the time. White list checking only then 
+	# Saves overall performance response rate for the majority of the requests
 	if (checkCache(host)): 
-		if (checkWhiteList(host)): 
+		if (checkWhiteList(host)):
 			return False
 		return True
 	if (checkRegEx(host)):
@@ -103,7 +107,7 @@ def isBlocked(host):
 		return True
 	return False
 
-# returns true if host contains string match
+# returns true if host contains string match. We dont want to block these URLs
 def checkWhiteList(host):
 	for line in WhiteList: #Simple checking for hostname match
 		if line in host:
@@ -128,7 +132,7 @@ def checkRegEx(host):
 def checkCache(host):
 	ittr = host.count('.') # how far do we go 
 	# check if ittr is too high, if so bail because it bogus
-	if ittr > 10: return True # more then 10 dots, bogus and fail.
+	if ittr > 10: return True # more then 10 dots in the request address is bogus, fail.
 	while ittr > 0:
 		if BlockListDict.get(host) is not None:
 			#print "URL in list " + host
@@ -161,20 +165,26 @@ def handleClientSocket(client_socket, dns_socket, pending_requests_dict, blocked
 	
 	#print "Handle DNS side socket"
 	while 1:
+		# Currently there is a min of two processes so a mutex is needed. 
+		# TODO Run stats to see if a single thread without Mutex is faster then two with mutex
 		clientmutex.acquire()
 		try:
 			datagram, addr = client_socket.recvfrom(1024) # overkill for buffer size for DNS, still should only get 1 packet
 			starttime = timeit.default_timer()
-			clientmutex.release()
+			clientmutex.release() #Got the response from the socket, release the mutex and process packet
 			host=str(DNSRecord.parse(datagram).q.qname)[0:-1]
 			if (isBlocked(host)): 
 				printsting = "Blocked URL " + host   #printsting = "Blocked URL %(host)s"   
 				sendFailedLookup(client_socket, datagram, addr)
+				# If we are doing a counter summary, to get an accurate number, need a global mutuex
+				# This can be made faster by making it a local mutex or better removing mutex
+				# With no mutux, we might lose some block numbers but even if the numebr isnt perfect, it shouold be ok
 				if PrintSummary:
 					with counter_lock: #costly operation
 						blocked_urls.value += 1 #costly operation
 			else :
-				# send the packet to the configured DNS server
+				# Not blocked so send the packet to the configured DNS server
+				# TODO Add caching later. 
 				sent = dns_socket.send(datagram)
 				printsting = "Served URL  " + host
 				lookupval = datagram[0:2].encode('hex') + host
@@ -203,6 +213,8 @@ def handleDNSSocket(client_socket, dns_socket, pending_requests_dict):
 	servermutex = ServerMutex # locals are faster then globals
 	
 	while 1:
+		# Lets get the mutex for this process to proces DNS result
+		# TODO If just a single process handlign DNS, no need for mutex
 		servermutex.acquire()
 		current = multiprocessing.current_process()
 		#print "Reading DNS side socket"
@@ -212,8 +224,9 @@ def handleDNSSocket(client_socket, dns_socket, pending_requests_dict):
 			servermutex.release()
 			print "SYSTEM ERROR caught on handleDNSSocket.dns_socket.recvfrom ", e
 		else: 			
-			servermutex.release()
+			servermutex.release() #Got data from the DNS socket, release mutex so others can get and respond dns items
 			#print "Got DNS data"
+			# Get the DNS info so we can figure out who this response needs to be delivered to
 			host=str(DNSRecord.parse(datagram).q.qname)[0:-1]
 			#print "Host is " + host
 			lookupval = datagram[0:2].encode('hex') + host
@@ -236,6 +249,7 @@ def handleDNSSocket(client_socket, dns_socket, pending_requests_dict):
 					client_socket.sendto(datagram, addr)
 					del pending_requests_dict[lookupval]
 				except Exception as e:
+					del pending_requests_dict[lookupval]
 					print "SYSTEM ERROR. caught around handleDNSSocket.client_socket.sendto ", e # need to log
 	servermutex.release()
 	return
@@ -250,10 +264,14 @@ if __name__ == "__main__":
 	# get config file info
 	config = ConfigParser.ConfigParser()
 	config.read('config')
+	# What IP Address to bind to
 	listen_address = config.get('config', 'LOCALADDR').split(',', 1)
+	# DNS Server to use if a request isn't found
 	target_address = config.get('config', 'TARGETDNS').split(',', 1)
 	
+	# Number threads/processes to serve incoming client requests. Min 2
 	client_proc_count = config.getint('config', 'INPROC')
+	# Number of threads/process to serve DNS responses back to clients. Min 1
 	dns_proc_count = config.getint('config', 'OUTPROC')
 	
 	# sanity check the process count
@@ -270,6 +288,7 @@ if __name__ == "__main__":
 	#if 'True' in config.get('reporting', 'SERVED'): PrintServed = True
 	#if 'True' in config.get('reporting', 'TIME'): PrintTime = True
 	
+	# Get regex of blockable items
 	RegExList = config.get('regex', 'REGEXLIST')
 	
 	# set up sync items for multi processes
@@ -291,7 +310,7 @@ if __name__ == "__main__":
 		time.sleep(1)
 		raise SystemExit
 
-	# Launching processes results in a system running much faster then threads but need to clean up the launcher
+	# Launching processes results in a system running much faster than threads but need to clean up the launcher
 	for i in range(0,client_proc_count):
 		process = Process(target=handleClientSocket, args=(client, target, pending, blocked_urls, served_urls, counter_lock))
 		process.start()
